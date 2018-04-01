@@ -3,40 +3,31 @@
 static struct jobDetails{
 	int processId;
 	int arrivalTime;
-	int burstTime;	
+	int burstTime;
 	int bbD;
 	int turnAroundTime;
 	int endTime;
-}student[100], faculty[100], ready[100];
+}student[100], faculty[100], ready[100], running[100];
 
 int facultyJobCount=0;
 int studentJobCount=0;
 int rpointer=0;
 int time=0;
+int rpointer=0;
+
+void check(int t, int job){
+	if(ready[job].arrivalTime == t){
+		running[rpointer]= ready[job];
+	}
+}
+
+void runner(){
+	int
+}
+
 
 void worker(){
-	int i;
-	int jobS=0;
-	int jobE=0;
-	int tracker=0;
-	printf("\nWorker");
-	while(time<120){
-		printf("\Worker at time : %d", time);
-		if(ready[tracker].arrivalTime == time){
-			jobE++;
-		}
-		for(i= jobS ; i<= jobE; i++){
-			if(ready[i].bbD>2){
-			ready[i].bbD -= 2;
-			time += 2;
-			} else {
-				time += ready[i].bbD;
-				ready[i].bbD = 0;
-				ready[i].endTime = time;
-				jobS++;
-			}	
-		}
-	}
+
 }
 
 void readyGen(){
@@ -111,7 +102,7 @@ void main(){
 			printf("QueryId: "); scanf("%d", &faculty[facultyJobCount].processId);
 			printf("Arrival Time (mins from 10:00 am): "); scanf("%d", &faculty[facultyJobCount].arrivalTime);
 			printf("Query Resolving duration (mins): "); scanf("%d", &faculty[facultyJobCount].burstTime);
-			//faculty[facultyJobCount].complete= 0;
+			faculty[facultyJobCount].bbD= faculty[facultyJobCount].burstTime;
 			facultyJobCount++;
 		} 
 		else{
@@ -119,7 +110,7 @@ void main(){
 			printf("QueryId: "); scanf("%d", &student[studentJobCount].processId);
 			printf("Arrival Time (mins from 10:00 am) : "); scanf("%d", &student[studentJobCount].arrivalTime);
 			printf("Query Resolving Time (mins): "); scanf("%d", &student[studentJobCount].burstTime);
-			//student[studentJobCount].complete = 0;
+			student[studentJobCount].bbD = student[studentJobCount].burstTime;
 			studentJobCount++;
 		}
 	}
