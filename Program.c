@@ -4,8 +4,6 @@ struct job{
 	int pid;
 	int at;
 	int bt;
-	int tat;
-	int wt;
 	int cmpt;
 	int rbt;
 }f[100], s[100], m[100];
@@ -85,7 +83,6 @@ void merger(){
 			mc++;
 			isc++;
 		}
-		
 	}
 	else if(sc==0){
 		while(ifc!=fc){
@@ -100,10 +97,20 @@ void merger(){
 }
 
 void printer(){
-	int i=0; 
+	int i=0, total=0, sum=0; 
+	double avg;
+	printf("\nSummary for the Execution\n");
+	printf("\nQuery ID\tArrival Time\tRessolving Time\tCompletion Time\tTurn Around Time\tWaiting Time");
 	for(i; i<mc; i++){
-		printf("\n\nId: %d Atime: %d, RBT: %d, CMPT: %d", m[i].pid, m[i].at, m[i].rbt, m[i].cmpt);
+		printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t\t%d",
+		m[i].pid, (m[i].at+1000), m[i].bt, (m[i].cmpt+1000), (m[i].cmpt-m[i].at), ((m[i].cmpt-m[i].at)- m[i].bt));
+		total= m[i].cmpt;
+		sum+= (m[i].cmpt-m[i].at);
 	}
+	avg = sum/mc;
+	printf("\n\nTotal time Spent for all queries: %d", total);
+	printf("\nAverage query time: %lf", avg);
+	printf("\nProcess Execution Complete");
 }
 
 void input(){
@@ -117,12 +124,22 @@ void input(){
 			printf("\nJob Type (1/2): "); scanf("%d", &map);
 			if(map==1){
 				printf("Query Id: "); scanf("%d", &f[fc].pid);
-				printf("Arrival Time: "); scanf("%d", &t); f[fc].at= t-1000;
-				printf("Resolving Time: "); scanf("%d", &f[fc].bt); f[fc].rbt= f[fc].bt; 
+				printf("Arrival Time: "); scanf("%d", &t);
+				if(t<1000 || t>1200){
+					printf("\nEnter Correct time");
+					input();
+				}
+				else{f[fc].at= t-1000;}
+				printf("Resolving Time: "); scanf("%d", &f[fc].bt);	 f[fc].rbt= f[fc].bt; 
 				fc++;
 			} else{
 				printf("Query Id: "); scanf("%d", &s[sc].pid);
-				printf("Arrival Time: "); scanf("%d", &t); s[sc].at= t-1000;
+				printf("Arrival Time: "); scanf("%d", &t); 
+				if(t<1000 || t>1200){
+					printf("\nEnter Correct time\n");
+					input();
+				}
+				else {s[sc].at= t-1000; }
 				printf("Resolving Time: "); scanf("%d", &s[sc].bt);	 s[sc].rbt= s[sc].bt;
 				sc++;
 			}
@@ -130,7 +147,16 @@ void input(){
 	}
 }
 
+void inst(){
+	printf("\nWelcome, please follow these instruction for proper functioning of the program"
+			"\n**>Enter time in 2400 hours format. example for 10:30 am enter 10030"
+			"\n**>Enter Query arrival times in ascending order, i.e., in real time arrival manner\n"
+			"\nAll Time units are in minutes. \n\n"
+			);
+}
+
  main(){
+ 	inst();
 	input();
 	merger();
 	roundRobin();
