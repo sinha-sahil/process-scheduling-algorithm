@@ -1,6 +1,4 @@
 #include<stdio.h>
-#include<iostream>
-using namespace std;
 
 struct job{
 	int pid;
@@ -16,7 +14,28 @@ int n, fc=0, sc=0, mc=0;
 int quanta;
 
 void roundRobin(){
-
+	int time= m[0].at, mark=0, cc=0, i, rc;
+	while(time!=120 && cc!=mc){
+		for(i=0; i<=mark; i++){
+			if(m[i].rbt > quanta){
+				time += quanta;
+				m[i].rbt -= quanta;
+			}
+			else if(m[i].rbt <=quanta && m[i].rbt !=0){
+				time += m[i].rbt;
+				m[i].rbt =0;
+				m[i].cmpt = time;
+				cc++;
+			}
+			else;
+		}
+		int start = mark+1;
+		for(rc= start; rc<mc; rc++){
+			if(m[rc].at <= time){
+				mark++;
+			}
+		}
+	}	
 }
 
 void merger(){
@@ -76,7 +95,7 @@ void merger(){
 		}
 	}
 	else {
-		cout<<"No valid jobs"<<endl;
+		printf("\n No valid Jobs available\n");
 	}
 }
 
