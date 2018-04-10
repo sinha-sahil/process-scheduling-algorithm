@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include<iostream>
+using namespace std;
 
 struct job{
 	int pid;
@@ -6,6 +8,7 @@ struct job{
 	int bt;
 	int tat;
 	int wt;
+	int cmpt;
 	int rbt;
 }f[100], s[100], m[100];
 
@@ -13,91 +16,81 @@ int n, fc=0, sc=0, mc=0;
 int quanta;
 
 void roundRobin(){
-	int time=0,i, cCount=0;
-	while(1){
-		for(i=0; i<mc; i++){
-			if(m[i].rbt>quanta){
-				time += quanta; m[i].rbt -= quanta;
-			}
-			else if(m[i].rbt ==0){ continue;
-			}
-			else{
-				time += m[i].rbt; m[i].rbt=0; cCount++;
-			}
-		}
-		if(time==120 || cCount == mc) break;
-	}
-	
+
 }
 
 void merger(){
-	int min= fc, i, flag=1, r=0, maxr=0;
-	if( fc>0 && sc>0){
-		if(min>sc){ flag=2; min=sc;	}
-		while(r != min){
-			if(flag==1){
-				if(f[r].at == s[maxr].at){
-					m[mc]= f[r]; r++; mc++;
-					m[mc]= s[maxr]; mc++; maxr++;
-				}
-				else if(f[r].at < s[maxr].at){
-					m[mc]= f[r]; r++; mc++;
-				}
-				else{
-					m[mc]= s[maxr]; maxr++; mc++;
-				}		
+	int isc=0, ifc= 0, min, flag;
+	if( fc!=0  && sc!=0){
+		while(isc<sc && ifc<fc){
+			if(f[ifc].at == s[isc].at){
+				m[mc] = f[ifc];
+				mc++;
+				ifc++;
+				m[mc]= s[isc];
+				mc++;
+				isc++;
 			}
-			else{
-				if(s[r].at== f[maxr].at){
-					m[mc]= f[maxr]; mc++; maxr++;
-					m[mc]= s[r]; mc++; r++;
-				}
-				else if(s[r].at < f[maxr].at){
-					m[mc]= s[r]; mc++; r++;
-				}
-				else{
-					m[mc] = f[maxr]; mc++; maxr++;
-				}
-			
+			else if(f[ifc].at < s[isc].at){
+				m[mc]= f[ifc];
+				mc++;
+				ifc++;
 			}
-		}
-		if(min!=sc){
-			while(maxr!=sc){
-				m[mc]= s[maxr]; mc++; maxr++;
-			}	
-		}
-		else{
-			while(maxr!=fc){
-				m[mc]= f[maxr]; mc++; maxr++;
+			else if(f[ifc].at > s[isc].at){
+				m[mc]= s[isc];
+				mc++;
+				isc++;
 			}
+			else;
 		}
-	}	
-	else if(sc==0){
-		while(r!=fc){
-			m[mc]= f[r]; mc++; r++;
+		if(mc != (fc+sc)){
+			if(fc!=ifc){
+				while(ifc!=fc){
+					m[mc]= f[ifc];
+					mc++;
+					ifc++;
+				}
+			}
+			else if(sc!=isc){
+				while(isc!=sc){
+					m[mc]= s[isc];
+					mc++;
+					isc++;
+				}
+			}
 		}
 	}
 	else if(fc==0){
-		while(r!=sc){
-			m[mc]= s[r]; mc++; r++;
+		while(isc!=sc){
+			m[mc]= s[isc];
+			mc++;
+			isc++;
+		}
+		
+	}
+	else if(sc==0){
+		while(ifc!=fc){
+			m[mc]= f[ifc];
+			mc++;
+			ifc++;
 		}
 	}
 	else {
-		printf("\n No Jobs to be done"); exit(0);
+		cout<<"No valid jobs"<<endl;
 	}
 }
 
 void printer(){
 	int i=0; 
 	for(i; i<mc; i++){
-		printf("\n\nId: %d Atime: %d, RBT: %d", m[i].pid, m[i].at, m[i].rbt);
+		printf("\n\nId: %d Atime: %d, RBT: %d, CMPT: %d", m[i].pid, m[i].at, m[i].rbt, m[i].cmpt);
 	}
 }
 
 void input(){
 	int map,  i, t;
 	printf("Enter total no of queries: "); scanf("%d", &n);
-	if(n==0) { printf("\n No queries\n"); exit(0);}
+	if(n==0) { printf("\n No queries\n"); }
 	else{
 		printf("\nEnter Quanta for each Process: "); scanf("%d", &quanta);
 		printf("\nEnter 1 for faculty and 2 for student\n");
@@ -118,7 +111,7 @@ void input(){
 	}
 }
 
-void main(){
+ main(){
 	input();
 	merger();
 	roundRobin();
